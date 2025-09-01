@@ -69,7 +69,13 @@ products.forEach((product)=>{productsHTML+=`<div class="product-container">
                     Cart.push({productId:productId,quantity:1});
                     
             }
-            console.log(Cart);        
+            let cartquantity=0;
+            Cart.forEach((item)=>{
+              cartquantity+=item.quantity;
+            });
+
+            document.querySelector(".js-cart-quantity").innerHTML=cartquantity;
+            
        
       
         });
