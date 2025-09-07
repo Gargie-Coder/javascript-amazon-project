@@ -6,14 +6,18 @@
  * 1. Import data (products, cart).
  * 2. Render products into the grid dynamically.
  * 3. Handle cart updates when a product is added:
- *    - Update quantity in the cart.
+ *    - Update quantity in the cart (handled in cart.js).
  *    - Update total cart quantity in header.
  * 4. Show "Added to Cart" confirmation message.
  * 5. Add event listeners to buttons.
+ *
+ * Note:
+ * - The function updateCartQuantity() is now imported from cart.js
+ *   to keep cart logic separate from UI rendering.
  */
 
 // 1. Import cart and product data
-import { Cart } from "../data/cart.js";
+import { Cart, updateCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 // 2. Build the HTML for the products grid
@@ -82,29 +86,13 @@ products.forEach((product) => {
 });
 
 /**
- * 3a. Update the cart when a product is added or quantity is changed
- * @param {string} productId - ID of the product being updated
+ * 3b. Update the total quantity shown in the header
  */
-function updateCartQuantity(productId) {
-  // Get the quantity selected for this product
-  const quantitySelector = document.querySelector(
-    `.js-quantity-selector-${productId}`
-  );
-  const quantity = Number(quantitySelector.querySelector("select").value);
-
-  // Check if product already exists in the cart
-  let matchingItem = Cart.find((item) => item.productId === productId);
-
-  if (matchingItem) {
-    // Update quantity if product already in cart
-    matchingItem.quantity = quantity;
-  } else {
-    // Add new product to cart
-    Cart.push({ productId, quantity });
-  }
-
-  // Update total cart quantity in header
+function updateHeaderCartQuantity() {
+  // Sum up all item quantities
   const cartQuantity = Cart.reduce((total, item) => total + item.quantity, 0);
+
+  // Update cart quantity in the header element
   document.querySelector(".js-cart-quantity").textContent = cartQuantity;
 }
 
@@ -127,16 +115,21 @@ function showAddedToCartMessage(productId) {
   }, 2000);
 }
 
-// 5. Insert generated products into the DOM
+// 5a. Insert generated products into the DOM
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
-// 5. Add event listeners to "Add to Cart" buttons
+// 5b. Add event listeners to "Add to Cart" buttons
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
-    
-    // Update cart and show confirmation message
+
+    // Step 1: Update the cart data (handled in cart.js)
     updateCartQuantity(productId);
+
+    // Step 2: Update the header quantity display
+    updateHeaderCartQuantity();
+
+    // Step 3: Show the temporary "Added" confirmation message
     showAddedToCartMessage(productId);
   });
 });
