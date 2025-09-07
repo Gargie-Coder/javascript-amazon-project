@@ -19,6 +19,7 @@
 // 1. Import cart and product data
 import { Cart, updateCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
+import { formatCurrency } from "./utils/money.js";
 
 // 2. Build the HTML for the products grid
 let productsHTML = "";
@@ -47,7 +48,7 @@ products.forEach((product) => {
 
       <!-- Product price -->
       <div class="product-price">
-        $${product.priceCents / 100}
+        ${formatCurrency(product.priceCents)}
       </div>
 
       <!-- Quantity selector -->
