@@ -99,9 +99,10 @@ document.querySelectorAll(".delete-quantity-link").forEach((deleteLink) => {
       const productId = deleteLink.dataset.productId;
       console.log("Delete link clicked for product:", productId);
       removeFromCart(productId);
+      // Remove the item from the DOM
       const cartItemElement = document.querySelector(`.js-cart-item-container-${productId}`);
       cartItemElement.remove();
-      // Optionally, you can also update the cart display or total price here
+     
 
       
 }); 

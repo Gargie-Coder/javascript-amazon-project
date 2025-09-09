@@ -17,7 +17,7 @@
  */
 
 // 1. Import cart and product data
-import { Cart, updateCartQuantity } from "../data/cart.js";
+import { Cart, updateCartQuantity,SaveCartToLocalStorage } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
@@ -95,6 +95,7 @@ function updateHeaderCartQuantity() {
 
   // Update cart quantity in the header element
   document.querySelector(".js-cart-quantity").textContent = cartQuantity;
+  SaveCartToLocalStorage();
 }
 
 /**
