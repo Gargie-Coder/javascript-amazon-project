@@ -1,40 +1,73 @@
-export let Cart=JSON.parse(localStorage.getItem('Cart')) 
-||[
-   
+// data/cart.js
+export let Cart = JSON.parse(localStorage.getItem('Cart')) || [
+  {productId:"e43638ce-6aa0-4b85-b27f-e1d07eb678c6", quantity:1,deliverOptionId:"1"},
+  {
+    productId:"15b6fc6f-327a-4ec4-896f-486349e85a3d",
+    quantity:1,
+    deliverOptionId:"2"
+  },
+  {
+    productId:"54e0eccd-8f36-462b-b68a-8182611d9add",
+    quantity:1,
+    deliverOptionId:"3"
+  }
 ];
 
-
-export function SaveCartToLocalStorage(){
-  localStorage.setItem('Cart',JSON.stringify(Cart));
+export function SaveCartToLocalStorage() {
+  localStorage.setItem('Cart', JSON.stringify(Cart));
 }
+
+/**
+ * Update quantity from the product page selector when "Add to Cart" is clicked.
+ * If product exists update its quantity, otherwise push new item.
+ * (productId is a string)
+ */
 export function updateCartQuantity(productId) {
-  // Get the quantity selected for this product
-  const quantitySelector = document.querySelector(
-    `.js-quantity-selector-${productId}`
-  );
-  const quantity = Number(quantitySelector.querySelector("select").value);
+  const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
+  if (!quantitySelector) return;
+  const quantity = Number(quantitySelector.querySelector('select').value) || 1;
 
-  // Check if product already exists in the cart
-  let matchingItem = Cart.find((item) => item.productId === productId);
-
-  if (matchingItem) {
-    // Update quantity if product already in cart
-    matchingItem.quantity = quantity;
+  const existing = Cart.find(item => item.productId === productId);
+  if (existing) {
+    existing.quantity = quantity;
   } else {
-    // Add new product to cart
-    Cart.push({ productId, quantity });
+    Cart.push({ productId, quantity, deliverOptionId:"1" });
   }
 
   SaveCartToLocalStorage();
 }
+
+/**
+ * Remove product from cart entirely
+ */
 export function removeFromCart(productId) {
-  const newCart=[];
-  Cart.forEach(element => {
-    if(element.productId!==productId){
-      newCart.push(element);
+  Cart = Cart.filter(item => item.productId !== productId);
+  SaveCartToLocalStorage();
+}
+
+/**
+ * Update quantity for an item already in cart (used on checkout)
+ */
+export function updateQuantity(productId, new_quantity) {
+  const item = Cart.find(i => i.productId === productId);
+  if (item) {
+    item.quantity = Number(new_quantity) || 0;
   }
-  });
-  Cart=newCart;
-  console.log(Cart);
+  SaveCartToLocalStorage();
+}
+
+/**
+ * Single source-of-truth function to update visible header counts.
+ * Updates both header badge (.js-cart-quantity) and checkout header (.js-checkout-header-middle-section) if present.
+ */
+export function updateHeaderCartQuantity() {
+  const cartQuantity = Cart.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0);
+
+  const headerQuantity = document.querySelector('.js-cart-quantity');
+  if (headerQuantity) headerQuantity.textContent = cartQuantity;
+
+  const checkoutHeader = document.querySelector('.js-checkout-header-middle-section');
+  if (checkoutHeader) checkoutHeader.textContent = `Checkout (${cartQuantity} items)`;
+
   SaveCartToLocalStorage();
 }

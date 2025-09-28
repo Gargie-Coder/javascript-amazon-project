@@ -1,0 +1,121 @@
+Notes: Export, Import & External Libraries (Day.js Example)
+🔹 1. What are Modules?
+
+A module is a separate JavaScript file containing code (functions, classes, variables).
+
+To share code between modules, we use:
+
+export → makes code available outside the file.
+
+import → brings exported code into another file.
+
+🔹 2. Types of Export
+Named Export
+
+Multiple exports allowed per file.
+
+Must import using { }.
+
+// math.js
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+
+// app.js
+import { add, subtract } from './math.js';
+
+Default Export
+
+Only one default export per file.
+
+Imported without { }, and can be renamed.
+
+// greet.js
+export default function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+// app.js
+import greet from './greet.js';
+greet("Alice");
+
+🔹 3. Using External Libraries
+
+External libraries = pre-built code written by others (e.g., Lodash, Axios, Day.js).
+They can be added in two ways:
+
+(a) Using npm + import
+npm install dayjs
+
+// checkout.js
+import dayjs from "dayjs"; // default export
+const today = dayjs();
+console.log(today.format("YYYY-MM-DD"));
+
+(b) Using CDN + <script>
+<script src="https://unpkg.com/dayjs@1.11.10/dayjs.min.js"></script>
+<script type="module" src="scripts/checkout.js"></script>
+
+
+The CDN version attaches the library to the global window object.
+
+That means you can call it anywhere in your scripts without importing:
+
+var today = dayjs(); // globally available
+
+🔹 4. How Day.js Becomes Globally Available
+
+When you load via <script src="...dayjs.min.js"></script>:
+
+The library code runs in the browser.
+
+It assigns itself to the window object (global namespace).
+
+So you can use dayjs() in any other script loaded after it.
+
+👉 That’s why in your code:
+
+var today = dayjs(); 
+
+
+works without an import statement — because Day.js is already on window.
+
+🔹 5. Your Project Example
+
+Local modules (your own code):
+
+import { Cart, removeFromCart } from "../data/cart.js";
+
+
+External library (Day.js):
+
+<script src="https://unpkg.com/dayjs@1.11.10/dayjs.min.js"></script>
+
+
+→ makes dayjs global.
+
+var today = dayjs();
+const deliveryDate = today.add(7, 'days');
+console.log(deliveryDate.format('DDDD MM D'));
+
+
+✅ Summary:
+
+Use named exports when you want to share multiple utilities.
+
+Use a default export when a module has one main purpose.
+
+External libraries can be imported via npm (import) or CDN (<script>).
+
+When loaded via CDN, the library is attached to the global window object → becomes globally available.
+
+ESM version of library:
+  ->ESM stands for ECMAScript modules
+  ->A version that works with JavaScript modules 
+  ->when we are using the script tag it makes the library loaded on the web browser and will    cause naming conflict hence we will use library as a module which prevents naming conflicts.
+
+Why ESM is Better Here
+
+No naming conflicts — dayjs is not polluting the global namespace.
+Consistent with your other imports (import { Cart } from "../data/cart.js";).
+Scoped — only the files that import dayjs can use it.
+Works with modern bundlers (Vite, Webpack, Rollup).
