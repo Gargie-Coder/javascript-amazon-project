@@ -1,0 +1,59 @@
+🧩 What is MVC?
+
+MVC is a software architectural pattern that splits an application into three interconnected parts:
+
+Model (M) – Data & Business Logic
+
+Represents the data, the state of the application, and rules about how it changes.
+
+Example: A Cart object, methods like addItem(), removeItem(), and saving to localStorage or a database.
+
+In your project, the stuff in cart.js (storing, updating, saving to localStorage) is very Model.
+
+View (V) – UI/Presentation Layer
+
+Responsible for how the app looks (HTML, CSS, sometimes templates).
+
+Example: Rendering the cart summary on screen, showing delivery options, updating the DOM when the cart changes.
+
+In your project, the CartCheckoutHTML building and DOM rendering parts are View.
+
+Controller (C) – The glue between Model & View
+
+Handles user input (clicks, typing, API calls).
+
+Updates the Model based on actions.
+
+Then tells the View to update.
+
+Example: Listening for "Delete" button clicks, updating the cart array (Model), then calling renderOrderSummary() (View).
+
+In your project, all those event listeners are Controller.
+
+🔄 How MVC Works Together
+
+Imagine you click “Delete” on a cart item:
+
+Controller detects the click → calls removeFromCart(productId).
+
+Model updates the data → removes the item from Cart and saves to localStorage.
+
+View re-renders the cart summary with the updated list.
+
+✅ Benefits of MVC
+
+Separation of concerns → Each part has a clear responsibility.
+
+Easier to maintain → You can change how data is stored without touching the UI.
+
+Reusable code → Same Model can be used with a different View (e.g., a web UI and a mobile app).
+
+Scalability → Makes bigger apps easier to manage.
+
+⚖️ MVC in Your Checkout Code
+
+Model → cart.js (Cart array, updateQuantity, removeFromCart, SaveCartToLocalStorage)
+
+View → renderOrderSummary() (building HTML strings, inserting into DOM)
+
+Controller → Event listeners (.delete-quantity-link, .update-quantity-link, .save-quantity-link, .js-delivery-options)
