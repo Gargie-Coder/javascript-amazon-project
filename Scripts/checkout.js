@@ -4,8 +4,9 @@ import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { deliveryOptions } from "../data/deliveryOptions.js"; 
-
+function renderOrderSummary(){
 let CartCheckoutHTML = "";
+
 
 Cart.forEach((CartItem) => {
   const productId = CartItem.productId;
@@ -19,6 +20,7 @@ Cart.forEach((CartItem) => {
     }
   })
   const dayString=dayjs().add(deliveryoption.deliveryDays,'days').format('dddd, MMM D');
+  
 
   CartCheckoutHTML += `
     <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -147,9 +149,13 @@ document.querySelectorAll(".save-quantity-link").forEach((saveLink) => {
 updateHeaderCartQuantity();
 document.querySelectorAll('.js-delivery-options').forEach((option)=>{
   option.addEventListener('click',()=>{
-    const {productId,new_optionId} = option.dataset;//shorter way to write the below 2 lines
-    // const productid=option.dataset.productId;
-    // const new_optionid=option.dataset.optionId;
-    updatedeliveryoption(productId,new_optionId);
+    // const {productId,new_optionId} = option.dataset;//shorter way to write the below 2 lines
+    const productid=option.dataset.productId;
+    const new_optionid=option.dataset.optionId;
+    updatedeliveryoption(productid,new_optionid);
+    renderOrderSummary();
+    
   })
 })
+}
+renderOrderSummary();
