@@ -1,5 +1,5 @@
 // scripts/checkout.js
-import { Cart, removeFromCart, SaveCartToLocalStorage, updateQuantity, updateHeaderCartQuantity } from "../data/cart.js";
+import { Cart, removeFromCart, updatedeliveryoption, updateQuantity, updateHeaderCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
@@ -65,9 +65,9 @@ function deliverOptionsHTML(matchingProduct,cartItem){
     const priceCents=deliveryOption.PriceCents===0?'Free':deliveryOption.PriceCents;
     const ischecked=deliveryOption.id===cartItem.deliverOptionId;
     HTML += `
-     
-   
-    <div class="delivery-option">
+
+
+    <div class="delivery-option js-delivery-options" data-product-id="${matchingProduct.id}" data-option-id="${deliveryOption.id}">
       <input type="radio" ${ischecked?'checked':''} class="delivery-option-input" name="delivery-option-${matchingProduct.id}">
       <div>
         <div class="delivery-option-date">${dayString}</div>
@@ -145,3 +145,11 @@ document.querySelectorAll(".save-quantity-link").forEach((saveLink) => {
 // initial header update (in case page opened directly)
 // initial header update (in case page opened directly)
 updateHeaderCartQuantity();
+document.querySelectorAll('.js-delivery-options').forEach((option)=>{
+  option.addEventListener('click',()=>{
+    const {productId,new_optionId} = option.dataset;//shorter way to write the below 2 lines
+    // const productid=option.dataset.productId;
+    // const new_optionid=option.dataset.optionId;
+    updatedeliveryoption(productId,new_optionId);
+  })
+})
