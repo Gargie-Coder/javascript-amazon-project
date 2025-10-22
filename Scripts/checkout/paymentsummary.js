@@ -3,6 +3,7 @@ import { getproduct } from "../../data/products.js";
 import { getdeliveryoption } from "../../data/deliveryOptions.js";
 import { formatCurrency } from "../utils/money.js";
 
+
  export function renderpaymentsummary() {
   let productpriceTotalCents = 0;
   let shippingpriceTotalCents = 0;
