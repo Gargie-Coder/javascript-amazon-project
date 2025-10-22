@@ -1,26 +1,49 @@
 // scripts/checkout.js
 import { Cart, removeFromCart, updatedeliveryoption, updateQuantity, updateHeaderCartQuantity } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products,getproduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { deliveryOptions } from "../../data/deliveryOptions.js"; 
+import { deliveryOptions,getdeliveryoption } from "../../data/deliveryOptions.js"; 
 export function renderOrderSummary(){
 let CartCheckoutHTML = "";
 
+// helper to render delivery options for a product/cart item
+function deliverOptionsHTML(matchingProduct,cartItem){ 
+  let HTML = "";
+  deliveryOptions.forEach((deliveryOption) => {
 
+    const today=dayjs();
+    const deliverydate=today.add(deliveryOption.deliveryDays,'days');
+    const dayString=deliverydate.format('dddd,MMMM D');
+   const priceCents = Number(deliveryOption.PriceCents);
+  const priceDisplay = priceCents === 0 ? 'Free' : formatCurrency(priceCents);
+    const ischecked=deliveryOption.id===cartItem.deliverOptionId;
+    HTML += `
+
+
+    <div class="delivery-option js-delivery-options" data-product-id="${matchingProduct.id}" data-option-id="${deliveryOption.id}">
+      <input type="radio" ${ischecked?'checked':''} class="delivery-option-input" name="delivery-option-${matchingProduct.id}">
+      <div>
+        <div class="delivery-option-date">${dayString}</div>
+        <div class="delivery-option-price">${formatCurrency(priceCents)}</div>
+      </div>
+    </div>
+    
+    `
+    
+  })
+  return HTML;
+}
+
+// build HTML for each cart item
 Cart.forEach((CartItem) => {
   const productId = CartItem.productId;
-  const matchingProduct = products.find(p => p.id === productId);
+  const matchingProduct = getproduct(productId);
   if (!matchingProduct) return;
-  const deliverOptionId=CartItem.deliverOptionId;
-  let deliveryoption;
-  deliveryOptions.forEach((option)=>{
-    if(option.id===deliverOptionId){
-      deliveryoption=option;
-    }
-  })
-  const dayString=dayjs().add(deliveryoption.deliveryDays,'days').format('dddd, MMM D');
-  
+  const deliverOptionId = CartItem.deliverOptionId;
+   const deliveryoption = getdeliveryoption(deliverOptionId);
+
+  const dayString = dayjs().add(deliveryoption.deliveryDays,'days').format('dddd, MMM D');
 
   CartCheckoutHTML += `
     <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -48,49 +71,18 @@ Cart.forEach((CartItem) => {
           <div class="delivery-options-title">Choose a delivery option:</div>
 
           ${deliverOptionsHTML(matchingProduct,CartItem)}
-      
-
-          
         </div>
       </div>
     </div>
   `;
 });
 
-function deliverOptionsHTML(matchingProduct,cartItem){ 
-  let HTML = "";
-  deliveryOptions.forEach((deliveryOption) => {
-
-    const today=dayjs();
-    const deliverydate=today.add(deliveryOption.deliveryDays,'days');
-    const dayString=deliverydate.format('dddd,MMMM D');
-    const priceCents=deliveryOption.PriceCents===0?'Free':deliveryOption.PriceCents;
-    const ischecked=deliveryOption.id===cartItem.deliverOptionId;
-    HTML += `
-
-
-    <div class="delivery-option js-delivery-options" data-product-id="${matchingProduct.id}" data-option-id="${deliveryOption.id}">
-      <input type="radio" ${ischecked?'checked':''} class="delivery-option-input" name="delivery-option-${matchingProduct.id}">
-      <div>
-        <div class="delivery-option-date">${dayString}</div>
-        <div class="delivery-option-price">${formatCurrency(priceCents)}</div>
-      </div>
-    </div>
-    
-    `
-    
-  })
-  return HTML;
-  
-
-}
+// insert HTML into the page
 document.querySelector(".js-Cart-Checkout-HTML").innerHTML = CartCheckoutHTML;
 
-
-const today=dayjs();//using external library dayjs which is globally available because it is loaded via <script src="https://unpkg.com/dayjs@1.11.10/dayjs.min.js"></script>||now after removing that we are using esm version of dayjs to prevent the naming conflict and remove the scriot tag.
- const deliveryDate = today.add(7,'days');//here the 2nd parameter is predefined but is case insensitive and can be plural or singular
- console.log(deliveryDate.format('dddd,MM D'));//
-
+const today=dayjs();
+const deliveryDate = today.add(7,'days');
+console.log(deliveryDate.format('dddd,MM D'));
 
 /* --- event handlers --- */
 
@@ -145,17 +137,16 @@ document.querySelectorAll(".save-quantity-link").forEach((saveLink) => {
 });
 
 // initial header update (in case page opened directly)
-// initial header update (in case page opened directly)
 updateHeaderCartQuantity();
+
 document.querySelectorAll('.js-delivery-options').forEach((option)=>{
   option.addEventListener('click',()=>{
-    // const {productId,new_optionId} = option.dataset;//shorter way to write the below 2 lines
     const productid=option.dataset.productId;
     const new_optionid=option.dataset.optionId;
     updatedeliveryoption(productid,new_optionid);
     renderOrderSummary();
-    
   })
 })
+
 }
 renderOrderSummary();
