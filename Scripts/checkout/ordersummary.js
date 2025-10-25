@@ -88,15 +88,18 @@ console.log(deliveryDate.format('dddd,MM D'));
 /* --- event handlers --- */
 
 // delete
-document.querySelectorAll(".delete-quantity-link").forEach((deleteLink) => {
-  deleteLink.addEventListener("click", () => {
-    const productId = deleteLink.dataset.productId;
-    removeFromCart(productId);
-    const el = document.querySelector(`.js-cart-item-container-${productId}`);
-    if (el) el.remove();
-    updateHeaderCartQuantity();
-    renderpaymentsummary();
-  });
+const cartContainer = document.querySelector(".js-Cart-Checkout-HTML");
+
+cartContainer.addEventListener("click", (event) => {
+  const target = event.target;
+  
+  // Delete item
+  if (target.classList.contains("delete-quantity-link")) {
+    const productId = target.dataset.productId;
+    removeFromCart(productId); // update cart data
+    renderOrderSummary();  
+    renderpaymentsummary();     // regenerate HTML for all items
+  }
 });
 
 // update (enter edit mode + prefill)
