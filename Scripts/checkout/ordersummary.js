@@ -3,8 +3,9 @@ import { Cart, removeFromCart, updatedeliveryoption, updateQuantity, updateHeade
 import { products,getproduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { deliveryOptions,getdeliveryoption } from "../../data/deliveryOptions.js"; 
+import { deliveryOptions,getdeliveryoption,calculateDeliveryDate } from "../../data/deliveryOptions.js"; 
 import { renderpaymentsummary } from "./paymentsummary.js"; 
+import { renderCheckoutHeader } from "./checkoutheader.js";
 export function renderOrderSummary(){
 let CartCheckoutHTML = "";
 
@@ -12,10 +13,7 @@ let CartCheckoutHTML = "";
 function deliverOptionsHTML(matchingProduct,cartItem){ 
   let HTML = "";
   deliveryOptions.forEach((deliveryOption) => {
-
-    const today=dayjs();
-    const deliverydate=today.add(deliveryOption.deliveryDays,'days');
-    const dayString=deliverydate.format('dddd,MMMM D');
+    const dayString=calculateDeliveryDate(deliveryOption);
    const priceCents = Number(deliveryOption.PriceCents);
   const priceDisplay = priceCents === 0 ? 'Free' : formatCurrency(priceCents);
     const ischecked=deliveryOption.id===cartItem.deliverOptionId;
@@ -97,8 +95,11 @@ cartContainer.addEventListener("click", (event) => {
   if (target.classList.contains("delete-quantity-link")) {
     const productId = target.dataset.productId;
     removeFromCart(productId); // update cart data
+    renderCheckoutHeader();
     renderOrderSummary();  
-    renderpaymentsummary();     // regenerate HTML for all items
+    renderpaymentsummary();
+  
+     // regenerate HTML for all items
   }
 });
 
