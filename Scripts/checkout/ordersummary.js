@@ -13,6 +13,7 @@ let CartCheckoutHTML = "";
 function deliverOptionsHTML(matchingProduct,cartItem){ 
   let HTML = "";
   deliveryOptions.forEach((deliveryOption) => {
+    
     const dayString=calculateDeliveryDate(deliveryOption);
    const priceCents = Number(deliveryOption.PriceCents);
   const priceDisplay = priceCents === 0 ? 'Free' : formatCurrency(priceCents);
