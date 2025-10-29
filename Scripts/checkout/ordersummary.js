@@ -13,7 +13,7 @@ let CartCheckoutHTML = "";
 function deliverOptionsHTML(matchingProduct,cartItem){ 
   let HTML = "";
   deliveryOptions.forEach((deliveryOption) => {
-    
+
     const dayString=calculateDeliveryDate(deliveryOption);
    const priceCents = Number(deliveryOption.PriceCents);
   const priceDisplay = priceCents === 0 ? 'Free' : formatCurrency(priceCents);
@@ -102,23 +102,20 @@ cartContainer.addEventListener("click", (event) => {
   
      // regenerate HTML for all items
   }
-});
-
-// update (enter edit mode + prefill)
-document.querySelectorAll(".update-quantity-link").forEach((updateLink) => {
-  updateLink.addEventListener("click", () => {
-    const productId = updateLink.dataset.productId;
+  // Update quantity (enter edit mode)
+  if (target.classList.contains("update-quantity-link")) {
+    const productId = target.dataset.productId;
     const cartItemElement = document.querySelector(`.js-cart-item-container-${productId}`);
     if (!cartItemElement) return;
     cartItemElement.classList.add("is-editing-quantity");
-
     const input = cartItemElement.querySelector(".quantity-input");
     const current = cartItemElement.querySelector(".quantity-label").textContent;
     input.value = current;
     input.focus();
-    
-  });
+  } 
 });
+
+
 
 // save (read input, update data and UI)
 document.querySelectorAll(".save-quantity-link").forEach((saveLink) => {
