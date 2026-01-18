@@ -1,6 +1,14 @@
 // data/cart.js
-export let Cart = JSON.parse(localStorage.getItem('Cart')) || [
-  {productId:"e43638ce-6aa0-4b85-b27f-e1d07eb678c6", quantity:1,deliverOptionId:"1"},
+export let Cart;
+loadFromStorage();
+ export function loadFromStorage() {
+  Cart = JSON.parse(localStorage.getItem('Cart'));
+  if(!Cart)
+  Cart =  [
+  {productId:"e43638ce-6aa0-4b85-b27f-e1d07eb678c6", 
+    quantity:1,
+    deliverOptionId:"1"
+  },
   {
     productId:"15b6fc6f-327a-4ec4-896f-486349e85a3d",
     quantity:1,
@@ -12,6 +20,7 @@ export let Cart = JSON.parse(localStorage.getItem('Cart')) || [
     deliverOptionId:"3"
   }
 ];
+}
 export function updatedeliveryoption(productid,new_optionid){
   let matchingProduct;
   Cart.forEach(element => {
@@ -34,14 +43,20 @@ export function SaveCartToLocalStorage() {
  */
 export function updateCartQuantity(productId) {
   const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
+  
   if (!quantitySelector) return;
+
   const quantity = Number(quantitySelector.querySelector('select').value) || 1;
 
+  // .find logic use kar rahe hain jaisa dusre code mein tha
   const existing = Cart.find(item => item.productId === productId);
+
   if (existing) {
+    // Exact wording: quantity update logic
     existing.quantity = quantity;
   } else {
-    Cart.push({ productId, quantity, deliverOptionId:"1" });
+    // New item push logic
+    Cart.push({ productId, quantity, deliverOptionId: "1" });
   }
 
   SaveCartToLocalStorage();
