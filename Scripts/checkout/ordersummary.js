@@ -46,7 +46,7 @@ Cart.forEach((CartItem) => {
   const dayString = dayjs().add(deliveryoption.deliveryDays,'days').format('dddd, MMM D');
 
   CartCheckoutHTML += `
-    <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
+    <div class="cart-item-container js-test-cart js-cart-item-container-${matchingProduct.id}">
       <div class="delivery-date">Delivery date: ${dayString}</div>
 
       <div class="cart-item-details-grid">
@@ -56,14 +56,14 @@ Cart.forEach((CartItem) => {
           <div class="product-name">${matchingProduct.name}</div>
           <div class="product-price">${formatCurrency(matchingProduct.priceCents)}</div>
 
-          <div class="product-quantity">
+          <div class="product-quantity js-test-quantity${matchingProduct.id}">
             <span>Quantity: <span class="quantity-label">${CartItem.quantity}</span></span>
             <span data-product-id="${matchingProduct.id}" class="update-quantity-link link-primary">Update</span>
 
             <input class="quantity-input" type="number" min="0" value="${CartItem.quantity}" />
 
             <span data-product-id="${matchingProduct.id}" class="save-quantity-link link-primary">Save</span>
-            <span data-product-id="${matchingProduct.id}" class="delete-quantity-link link-primary">Delete</span>
+            <span data-product-id="${matchingProduct.id}" class="delete-quantity-link link-primary delete-test-link-${matchingProduct.id}">Delete</span>
           </div>
         </div>
 
@@ -156,4 +156,4 @@ document.querySelectorAll('.js-delivery-options').forEach((option)=>{
 })
 
 }
-renderOrderSummary();
+
