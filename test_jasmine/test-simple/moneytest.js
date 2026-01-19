@@ -1,5 +1,5 @@
 //automated tests for money formatting function
-import {formatCurrency} from "../Scripts/utils/money.js"
+import {formatCurrency} from "../../Scripts/utils/money.js"
 console.log("Test suite: money formatting tests");
 console.log("converting cents to formatted dollar string");
   if(formatCurrency(2095)==='$20.95'){//normal case
