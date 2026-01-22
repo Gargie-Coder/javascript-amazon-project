@@ -46,6 +46,7 @@ products.forEach((product) => {
       <div class="product-price">
        ${product.getPrice()}
       </div>
+    ${product.extraInfo()}
 
       <div class="product-quantity-container js-quantity-selector-${product.id}">
         <select>
