@@ -116,8 +116,8 @@ class Cart {
 const cart = new Cart("cart-local-storage-key");
 const businesscart = new Cart("business-cart-local-storage-key");
 
-console.log(cart);
-console.log(businesscart);
-console.log(businesscart instanceof Cart);
+// console.log(cart);
+// console.log(businesscart);
+// console.log(businesscart instanceof Cart);
 
 export default Cart;
