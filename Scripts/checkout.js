@@ -5,6 +5,23 @@ import { loadProducts,loadProductsfetch } from "../data/products.js";
 import { loadCart } from "../data/cart.js"; 
 // import Cart from "../data/cart-class.js";
 // import  "../data/backend-practice.js";
+async function loadPage(){
+  console.log("Loading page...");
+  await loadProductsfetch();
+  await new Promise((resolve)=>{
+    loadCart(()=>{
+      resolve();
+    });
+  });
+  renderOrderSummary();
+  renderpaymentsummary();
+  renderCheckoutHeader();
+  return 'Page Loaded';
+}
+loadPage();
+
+
+/*
 Promise.all([
   loadProductsfetch(),
 ,new Promise((resolve)=>{
