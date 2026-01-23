@@ -1,6 +1,6 @@
 import { renderOrderSummary } from '../../Scripts/checkout/ordersummary.js';
 import { loadFromStorage } from '../../data/cart.js';
-import { loadProducts } from '../../data/products.js';
+import { loadProducts, loadProductsfetch } from '../../data/products.js';
 
 describe("Order Summary", () => {
 
@@ -32,7 +32,9 @@ describe("Order Summary", () => {
   }
 
   beforeAll((done) => {
-    loadProducts(done);// Load products before running tests and done is provided by jasmine to handle async and wait for the loadProducts to complete
+    loadProductsfetch().then(() => {
+      done();
+    });
   });
   afterEach(() => {
     localStorage.getItem.calls.reset();

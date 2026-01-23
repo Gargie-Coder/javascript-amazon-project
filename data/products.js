@@ -55,7 +55,33 @@ class Clothing extends Product {
     return `<a href="${this.sizeChartLink}" target="_blank">Size Chart</a>`;
   }
 }
+export function loadProductsfetch(){
+  const promise = fetch("https://supersimplebackend.dev/products").
+  then((response)=>{
+    return response.json().
+    then((productsData)=>{
+       const loadedProducts = productsData.map((productDetails) => {
+      if (productDetails.type === "clothing") {
+        return new Clothing(productDetails);
+      }
+      return new Product(productDetails);
+    });
 
+    // ✅ Update exported products array
+    products.length = 0;
+    products.push(...loadedProducts);
+
+    console.log("Products loaded:", products);
+
+    })
+   })
+   return promise;
+}
+/*
+loadProductsfetch().then(()=>{
+  console.log("Products loaded via fetch:", products);
+});
+*/
 export function loadProducts(callback) {
   const xhr = new XMLHttpRequest();
 
