@@ -105,8 +105,8 @@ return cart;
 
 cart.loadFromStorage();
 businesscart.loadFromStorage();
-console.log(cart);
-console.log(businesscart);
+// console.log(cart);
+// console.log(businesscart);
 export default cart;
 
 

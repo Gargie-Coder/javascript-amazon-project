@@ -70,9 +70,22 @@ export function removeFromCart(productId) {
   SaveCartToLocalStorage();
 }
 
+export function loadCart(fun) {
+  const xhr = new XMLHttpRequest();
+
+  xhr.addEventListener("load", () => {
+   console.log(xhr.response);
+    fun();
+  });
+
+  xhr.open("GET", "https://supersimplebackend.dev/cart");
+  xhr.send();
+}
+
 /**
  * Update quantity for an item already in cart (used on checkout)
  */
+
 export function updateQuantity(productId, new_quantity) {
   const item = Cart.find(i => i.productId === productId);
   if (item) {

@@ -25,7 +25,8 @@ function deliverOptionsHTML(matchingProduct,cartItem){
       <input type="radio" ${ischecked?'checked':''} class="delivery-option-input" name="delivery-option-${matchingProduct.id}">
       <div>
         <div class="delivery-option-date">${dayString}</div>
-        <div class="delivery-option-price">${matchingProduct.getPrice()}</div>
+        <div class="delivery-option-price">${priceDisplay}</div>
+
       </div>
     </div>
     
