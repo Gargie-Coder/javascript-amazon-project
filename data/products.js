@@ -1,4 +1,4 @@
-import { formatCurrency } from "../Scripts/utils/money.js";
+import { formatCurrency } from "/javascript-amazon-project/Scripts/utils/money.js";
 
 export const products = [];
 
