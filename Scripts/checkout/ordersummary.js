@@ -15,7 +15,7 @@ function deliverOptionsHTML(matchingProduct,cartItem){
   deliveryOptions.forEach((deliveryOption) => {
 
     const dayString=calculateDeliveryDate(deliveryOption);
-   const priceCents = Number(deliveryOption.PriceCents);
+   const priceCents = Number(deliveryOption.priceCents);
   const priceDisplay = priceCents === 0 ? 'Free' : formatCurrency(priceCents);
     const ischecked=deliveryOption.id===cartItem.deliverOptionId;
     HTML += `

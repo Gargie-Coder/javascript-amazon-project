@@ -71,7 +71,7 @@ export function renderpaymentsummary() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            cart: cart
+            cart: Cart
           })
         });
 

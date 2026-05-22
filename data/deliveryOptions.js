@@ -26,13 +26,13 @@ export function skipWeekends(deliveryDays) {
 
 export function getdeliveryoption(deliveryOptionId) {
   return (
-    deliveryOptions.find((option) => option.id === deliveryOptionId) ||
+    deliveryOptions.find((option) => option.id === String(deliveryOptionId)) ||
     deliveryOptions[0]
   );
 }
 
 export const deliveryOptions = [
-  { id: "1", deliveryDays: 7, PriceCents: "0" },
-  { id: "2", deliveryDays: 3, PriceCents: "299" },
-  { id: "3", deliveryDays: 2, PriceCents: "499" },
+  { id: "1", deliveryDays: 7, priceCents: "0" },
+  { id: "2", deliveryDays: 3, priceCents: "299" },
+  { id: "3", deliveryDays: 2, priceCents: "499" },
 ];
