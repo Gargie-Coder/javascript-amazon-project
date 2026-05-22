@@ -8,10 +8,13 @@ import { products, loadProducts } from "../data/products.js";
 // Load products first, then render
 loadProducts(renderProductsGrid);
 
-function renderProductsGrid() {
+function renderProductsGrid(searchTerm = "") {
   let productsHTML = "";
 
   products.forEach((product) => {
+    if (searchTerm && !product.name.toLowerCase().includes(searchTerm)) {
+      return;
+    }
     productsHTML += `
       <div class="product-container">
         <div class="product-image-container">
@@ -59,8 +62,13 @@ function renderProductsGrid() {
   });
 
   const grid = document.querySelector(".js-products-grid");
-  grid.innerHTML = productsHTML;
 
+  if (searchTerm && productsHTML === "") {
+    grid.innerHTML = `<p style="padding: 20px">No products found for "<strong>${searchTerm}</strong>"</p>`;
+    return;
+  }
+
+  grid.innerHTML = productsHTML;
   attachAddToCartEvents();
 }
 
@@ -76,6 +84,18 @@ function attachAddToCartEvents() {
     });
   });
 }
+
+document.querySelector(".search-button").addEventListener("click", () => {
+  const searchTerm = document.querySelector(".search-bar").value.toLowerCase().trim();
+  renderProductsGrid(searchTerm);
+});
+
+document.querySelector(".search-bar").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    const searchTerm = document.querySelector(".search-bar").value.toLowerCase().trim();
+    renderProductsGrid(searchTerm);
+  }
+});
 
 // Added to cart UI animation
 function showAddedToCartMessage(productId) {
